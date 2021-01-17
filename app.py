@@ -111,16 +111,67 @@ server = app.server
 
 app.layout = html.Div(children=[
 
-    html.H1(children=['Interactive Dashboard', html.H6('A Web Application for data visualisation by Federico Denni')]),
+    html.Div(className='header', children=[html.H1(children=['Interactive Dashboard']),
+
+    html.H5('A Web Application for data visualisation by Federico Denni')
+    ]),
 
     html.Div(
         className='first-chart-wrapper',
         children=[
+            html.H2('Markets Key Metrics Overview', className='overview-chart-title'),
+            html.H4('Select Metric'),
 
+            dcc.Checklist(
+                id='check-metric-select',
+                
+                options=[
+                    {'label':'Users', 'value':'users'},
+                    {'label':'Sessions', 'value':'sessions'},
+                    {'label':'Pageviews', 'value':'pageviews'},
+                    {'label':'Bounces', 'value':'bounces'}                
+              ],
+                value=['users','pageviews','sessions','bounces']
+           ),
+
+           html.H4('Select Market'),
+
+           dcc.RadioItems(
+                id='radio-market-select',
+                
+                options=[
+                    {'label':'Market 1', 'value':'Market 1'},
+                    {'label':'Market 2', 'value':'Market 2'},
+                    {'label':'Market 3', 'value':'Market 3'},
+                    {'label':'Market 4', 'value':'Market 4'},
+                    {'label':'Market 5', 'value':'Market 5'},
+                    {'label':'Market 6', 'value':'Market 6'},
+                    {'label':'Market 7', 'value':'Market 7'},
+                    {'label':'Market 8', 'value':'Market 8'},
+                    {'label':'Market 9', 'value':'Market 9'},
+                    {'label':'Market 10', 'value':'Market 10'},
+                    {'label':'Market 11', 'value':'Market 11'},
+                    {'label':'Market 12', 'value':'Market 12'}            
+              ],
+                value='Market 1'
+           ),
+
+            dcc.Graph(
+                id='first-chart'
+            )
+
+        ]        
+    ),
+
+    html.Div(
+        className='comparison-chart-wrapper',
+        children=[
+            html.H2('Markets Key Metrics Comparison', className='comparison-chart-title'),
             html.H4('Select Metric'),
 
             dcc.RadioItems(
                 id='radio-metric-select',
+                
                 options=[
                     {'label':'Users', 'value':'users'},
                     {'label':'Sessions', 'value':'sessions'},
@@ -130,8 +181,30 @@ app.layout = html.Div(children=[
                 value='users'
            ),
 
+           html.H4('Select Market'),
+
+           dcc.Checklist(
+                id='check-market-select',
+                
+                options=[
+                    {'label':'Market 1', 'value':'Market 1'},
+                    {'label':'Market 2', 'value':'Market 2'},
+                    {'label':'Market 3', 'value':'Market 3'},
+                    {'label':'Market 4', 'value':'Market 4'},
+                    {'label':'Market 5', 'value':'Market 5'},
+                    {'label':'Market 6', 'value':'Market 6'},
+                    {'label':'Market 7', 'value':'Market 7'},
+                    {'label':'Market 8', 'value':'Market 8'},
+                    {'label':'Market 9', 'value':'Market 9'},
+                    {'label':'Market 10', 'value':'Market 10'},
+                    {'label':'Market 11', 'value':'Market 11'},
+                    {'label':'Market 12', 'value':'Market 12'}            
+              ],
+                value=['Market 1']
+           ),
+
             dcc.Graph(
-                id='first-chart'
+                id='comparison-chart'
             )
 
         ]        
@@ -144,6 +217,7 @@ app.layout = html.Div(children=[
 
             dcc.RadioItems(
                 id='radio-avg-metric-select',
+                
                 options=[
                     {'label':'Average Users', 'value':'average_users'},
                     {'label':'Average Sessions per User', 'value':'average_sessions_per_user'},
@@ -165,14 +239,29 @@ app.layout = html.Div(children=[
 
 @app.callback(
     Output('first-chart', 'figure'),
-    [Input('radio-metric-select', 'value')]
+    [Input('check-metric-select', 'value'),
+    Input('radio-market-select', 'value')]
 )
 
-def update_first_chart(metric):
+def update_first_chart(metric, market):
     import plotly.express as px
-    fig = px.line(merged_df,color='market',x='date',y=metric)
+    fig = px.line(merged_df[merged_df.market==market],x='date',y=metric)
     add_slider(fig)
     return fig
+
+
+@app.callback(
+    Output('comparison-chart','figure'),
+    [Input('radio-metric-select','value'),
+    Input('check-market-select', 'value')]
+)
+
+def update_comparison_chart(metric,market):
+    import plotly.express as px
+    fig = px.line(merged_df[merged_df.market.isin(market)], x='date',y=metric, color='market')
+    add_slider(fig)
+    return fig
+
 
 @app.callback(
     Output('second-chart', 'figure'),

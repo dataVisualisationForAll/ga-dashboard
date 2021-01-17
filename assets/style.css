@@ -1,0 +1,55 @@
+body {
+    margin-right: 50px;
+    margin-left: 50px;
+  }
+  
+  h1 {
+    margin:0 auto;
+    text-align: center;
+    padding: 20px 20px 50px 20px;
+    font-size: 40px;
+    color:aliceblue
+  
+  }
+
+  h5 {
+    margin:0 auto;
+    text-align: center;
+    margin: 20px 20px 50px 20px;
+    font-size: 20px;
+    color:aliceblue
+  }
+
+
+  h2 {
+    margin:0 auto;
+    text-align: center;
+    margin: 20px 20px 50px 20px;
+    font-size: 35px;
+  }
+
+  .header {
+      background-color: rgb(0, 0, 77);
+      padding-bottom:20px;
+      margin-bottom: 120px;
+  }
+
+#check-metric-select {
+      margin-bottom: 50px;
+  }
+
+#radio-market-select {
+    margin-bottom: 50px;
+}
+
+#radio-metric-select {
+    margin-bottom: 50px;
+}
+
+#check-market-select {
+  margin-bottom: 50px;
+}
+
+.second-chart-wrapper {
+    margin-top: 80px;
+}
